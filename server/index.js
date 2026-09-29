@@ -349,6 +349,13 @@ io.on('connection', (socket) => {
   });
 });
 
+// Serve frontend in production
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../client/dist')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+});
+
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`🇫🇷 French Quiz Server running on http://localhost:${PORT}`);

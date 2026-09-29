@@ -12,7 +12,9 @@ import { sound } from './sounds';
 import { AVATAR_LIST } from './avatars';
 import { translations } from './translations';
 
-const BACKEND_URL = `http://${window.location.hostname}:5000`;
+const BACKEND_URL = window.location.port === '5173'
+  ? `http://${window.location.hostname}:5000`
+  : window.location.origin;
 
 function App() {
   const [socket, setSocket] = useState(null);

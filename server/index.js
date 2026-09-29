@@ -122,20 +122,16 @@ app.post('/api/admin/start', (req, res) => {
 app.post('/api/admin/reset', (req, res) => {
   gameState.status = 'lobby';
   gameState.startTime = null;
+  const newParticipants = {};
   Object.keys(gameState.participants).forEach(id => {
-    if (gameState.participants[id].role === 'participant') {
-      gameState.participants[id].score = 0;
-      gameState.participants[id].correctCount = 0;
-      gameState.participants[id].timeSpent = 0;
-      gameState.participants[id].submitted = false;
-      gameState.participants[id].progress = 0;
-      gameState.participants[id].streak = 0;
-      gameState.participants[id].answers = {};
+    if (gameState.participants[id].role === 'admin') {
+      newParticipants[id] = gameState.participants[id];
     }
   });
+  gameState.participants = newParticipants;
   broadcastState();
   io.emit('game_reset');
-  res.json({ success: true, message: 'Game reset to lobby' });
+  res.json({ success: true, message: 'All user data and participants cleared completely' });
 });
 
 // Socket Connections
@@ -201,21 +197,17 @@ io.on('connection', (socket) => {
     });
   });
 
-  // Admin Reset Game
+  // Admin Reset Game (Purge all participant data completely)
   socket.on('admin_reset_game', () => {
     gameState.status = 'lobby';
     gameState.startTime = null;
+    const newParticipants = {};
     Object.keys(gameState.participants).forEach(id => {
-      if (gameState.participants[id].role === 'participant') {
-        gameState.participants[id].score = 0;
-        gameState.participants[id].correctCount = 0;
-        gameState.participants[id].timeSpent = 0;
-        gameState.participants[id].submitted = false;
-        gameState.participants[id].progress = 0;
-        gameState.participants[id].streak = 0;
-        gameState.participants[id].answers = {};
+      if (gameState.participants[id].role === 'admin') {
+        newParticipants[id] = gameState.participants[id];
       }
     });
+    gameState.participants = newParticipants;
     broadcastState();
     io.emit('game_reset');
   });

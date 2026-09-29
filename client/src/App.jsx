@@ -92,9 +92,21 @@ function App() {
       setGameState(prev => ({
         ...prev,
         status: 'lobby',
-        startTime: null
+        startTime: null,
+        participants: []
       }));
+      setLeaderboard([]);
       setResultData(null);
+      setShowCeremonyModal(false);
+      setShowLeaderboardModal(false);
+
+      // If user was a participant, return them to the fresh login screen
+      setUser(prev => {
+        if (prev && prev.role === 'participant') {
+          return null; // Clears participant user data completely!
+        }
+        return prev; // Retains admin session
+      });
     });
 
     s.on('game_ended', (data) => {

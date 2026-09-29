@@ -1,0 +1,11 @@
+{
+  "name": "french-quiz-platform",
+  "version": "1.0.0",
+  "description": "French Passé Composé Multiplayer Quiz with Cartoon Avatars and Real-time Leaderboard",
+  "scripts": {
+    "server": "node server/index.js",
+    "client": "npm --prefix client run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "build": "npm --prefix client run build"
+  }
+}
